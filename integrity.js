@@ -101,12 +101,12 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
                 // communicate
                 let newCalculation = {url: script, integrity:integritySHA};
                 socket.emit("newCalculation",newCalculation);
-                // fs.unlink(filename, (err) => {
-                //     if (err) {
-                //       console.error(err)
-                //       return
-                //     }
-                // });
+                 fs.unlink(filename, (err) => {
+                     if (err) {
+                       console.error(err)
+                       return
+                     }
+                 });
             });
         })
     })
