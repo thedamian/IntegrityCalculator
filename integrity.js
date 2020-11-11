@@ -72,7 +72,7 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
     .then(res => res.text())
     .then(html => html);
 
-    GetScripts(html).map( async s=> {
+    GetScripts(html).map( async script=> {
 
         console.log("script",script);
 
