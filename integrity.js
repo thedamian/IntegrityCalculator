@@ -74,9 +74,9 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
 
     GetScripts(html).map( async s=> {
 
-        console.log("script",s);
+        console.log("script",script);
 
-        let scriptContent = await fetch(s)
+        let scriptContent = await fetch(script)
         .then(res => res.text())
         .then(html => html);
 
@@ -86,7 +86,7 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
         await fs.writeFile(filename, scriptContent, (err,data) => {
             if (err) {return console.log(err);}
             console.log("Wrote file: ",filename);
-            exec(`shasum -b -a 384 ${filename} | awk '{ print $1 }' | xxd -r -p | base64`, (error, stdout, stderr) => {
+            exec(`shasum -b -a 384 ${filename} | awk '{ print $1 }' | xxd -r -p | base64`, (error, integritySHA, stderr) => {
                 if (error) {
                     console.log(`error: ${error.message}`);
                     showError(socket)
@@ -97,10 +97,16 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
                     showError(socket)
                     return;
                 }
-                console.log(`code is: ${stdout}`);
+                console.log(`integrity for ${script}  is: ${integritySHA}`);
                 // communicate
-                let newCalculation = {url: "https://test.org/script.js", integrity:"123456789sdfghjx"};
-                socket.emit("newCalculation",newCalculation)
+                let newCalculation = {url: script, integrity:integritySHA};
+                socket.emit("newCalculation",newCalculation);
+                fs.unlink(filename, (err) => {
+                    if (err) {
+                      console.error(err)
+                      return
+                    }
+                });
             });
         })
     })
