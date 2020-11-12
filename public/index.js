@@ -1,6 +1,9 @@
 const socket = io();
 const urlInput = document.getElementById("url");
 const resultsDiv = document.getElementById("results");
+const scriptOnly = document.getElementById("scriptOnly");
+const scriptResults = document.getElementById("scriptResults");
+
 
 function submiturl() {
     if (!urlInput.value || !urlInput.value.trim()) {
@@ -12,6 +15,15 @@ function submiturl() {
     socket.emit('newUrl', UrlInfo);
     return false;
 }
+
+function submitscript() {
+    if (!scriptOnly.value || !scriptOnly.value.trim()) {
+        return false;
+    }
+    socket.emit('scriptOnly', scriptOnly.value);
+    return false;
+}
+
 
 socket.on("newCalculation", (CalculatedIntegrity) => {
     console.log("NewCalculation",CalculatedIntegrity)

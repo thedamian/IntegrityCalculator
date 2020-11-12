@@ -63,6 +63,10 @@ io.on('connection', (socket) => {
         console.log(urlInfo)
         RunInegrityCalculation(urlInfo,socket);
     })
+    socket.on('scriptOnly',ScriptUrl => {
+        console.log(ScriptUrl)
+        GetOneScript(ScriptUrl,socket);
+    })
 });
 
 
@@ -72,11 +76,17 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
     .then(res => res.text())
     .then(html => html);
 
-    GetScripts(html).map( async script=> {
+    GetScripts(html).map( async scriptUrl=> {
 
-        console.log("script",script);
+        console.log("script",scriptUrl);
+        GetOneScript(scriptUrl,socket)
+        
+    })
+}
 
-        let scriptContent = await fetch(script)
+let GetOneScript = async (scriptUrl,socket) => {
+    console.log("Getting: ",scriptUrl)
+    let scriptContent = await fetch(scriptUrl)
         .then(res => res.text())
         .then(html => html);
 
@@ -108,8 +118,7 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
                      }
                  });
             });
-        })
-    })
+        });
 }
 
 function showError(socket) {
