@@ -99,7 +99,7 @@ let RunInegrityCalculation = async (urlInfo,socket) => {
                 }
                 console.log(`integrity for ${script}  is: ${integritySHA}`);
                 // communicate
-                let newCalculation = {url: script, integrity:integritySHA};
+                let newCalculation = {url: script, integrity:'sha384-'+integritySHA.trim()};
                 socket.emit("newCalculation",newCalculation);
                  fs.unlink(filename, (err) => {
                      if (err) {
@@ -118,7 +118,9 @@ function showError(socket) {
 }
 
 function GetScripts(htmlToSearch) {
-    const scriptRex = /<script.*?src="(.*?)"[^>]+>/g;
+    //const scriptRex = /<script?\\w+(?:\\s+(?:src=\"([^\"]*)\")|[^\\s>]+|\\s+)*>/g;
+    //const scriptRex = /<script.*?src="(.*?)"[^>]+>/g;
+    const scriptRex = /<script.*?src="(.*?)"/g;
     const scripts = [];
       let script;
       while ((script = scriptRex.exec(htmlToSearch))) {
