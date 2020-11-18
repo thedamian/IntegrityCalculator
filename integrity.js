@@ -107,9 +107,9 @@ let GetOneScript = async (scriptUrl,socket) => {
                     showError(socket)
                     return;
                 }
-                console.log(`integrity for ${script}  is: ${integritySHA}`);
+                console.log(`integrity for ${scriptUrl}  is: ${integritySHA}`);
                 // communicate
-                let newCalculation = {url: script, integrity:'sha384-'+integritySHA.trim()};
+                let newCalculation = {url: scriptUrl, integrity:'sha384-'+integritySHA.trim()};
                 socket.emit("newCalculation",newCalculation);
                  fs.unlink(filename, (err) => {
                      if (err) {
