@@ -13,6 +13,7 @@ function submiturl() {
     let UrlInfo = {url: urlInput.value, id:socket.id}
 
     socket.emit('newUrl', UrlInfo);
+    urlInput.value = "";
     return false;
 }
 
@@ -21,6 +22,7 @@ function submitscript() {
         return false;
     }
     socket.emit('scriptOnly', scriptOnly.value);
+    scriptOnly.value = "";
     return false;
 }
 
